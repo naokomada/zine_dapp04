@@ -20,3 +20,8 @@ pnpm run dev
        * WalletConnect を利用する場合は、frontend/src/lib/wagmi.ts の projectId をご自身のものに置き換えてください。
 
   上記の設定が完了したら、frontend ディレクトリで pnpm run dev を実行すると、開発サーバーが起動します。
+
+
+// 登録した情報を参照するスクリプト
+npx hardhat run scripts/getState-viem.ts --network base_sepolia
+
