@@ -1,0 +1,61 @@
+{
+  "theme": "GitHub", 
+  "contextFileName": ".gemini/GEMINI.md",
+  "preferredEditor": "vscode",  
+  "selectedAuthType": "oauth-personal",
+  "fileFiltering": {
+    "respectGitIgnore": true,  // .gitignore考慮
+    "enableRecursiveFileSearch": true  // 再帰検索
+  },
+  "checkpointing": {
+    "enabled": true
+  },
+  // バグ報告カスタマイズ
+  "bugCommand": {
+    "urlTemplate": "https://github.com/myorg/myrepo/issues/new?title={title}&body={info}"
+  },
+  // テレメトリ
+  "telemetry": {
+    "enabled": false,
+    "target": "local",  // "local" or "gcp"
+    "otlpEndpoint": "http://localhost:4317",
+    "logPrompts": true
+  },
+  // 使用統計
+  "usageStatisticsEnabled": true,
+  "mcpServers": {
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "deepwiki": {
+      "url": "https://mcp.deepwiki.com/sse"
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    "base-mcp": {
+      "command": "node",
+      "args": ["/home/komada_naoki/.nvm/versions/node/v22.15.1/lib/node_modules/base-mcp/build/index.js"],
+      "env": {
+        "COINBASE_API_KEY_NAME": "fa6941a7-15b2-43d4-99f6-2da98ff7987b",
+        "COINBASE_API_PRIVATE_KEY": "+X2VWCIMlJV+ZjgVgODlNte6d66OQl1Iefivx6J5RHE49NiuscORBidIfgbqRJ8jHbfeWzPUqgakSCshkR1wbQ==",
+        "SEED_PHRASE": "broom unveil merge street admit kit orient shy brain athlete liquid crime",
+        "COINBASE_PROJECT_ID": "582b4cb2-e7ae-4dc1-9e40-0c70703eaa98",
+        "ALCHEMY_API_KEY": "mwYiFh0NdQ5qOlM35r71q",
+        "CHAIN_ID": "84532"
+      },
+      "disabled": false,
+      "autoApprove": []
+    },
+    "OpenZeppelinSolidityContracts": {
+      "type": "streamable-http",
+      "url": "https://mcp.openzeppelin.com/contracts/solidity/mcp"
+    }
+  }
+}
