@@ -29,7 +29,7 @@
 
 ### フェーズ2: フロントエンド開発
 
-- [ ] 4. **Web3設定とプロバイダー実装**
+- [x] 4. **Web3設定とプロバイダー実装**
   - `frontend` で `wagmi`, `viem` をインストール。
   - `src/lib/wagmi.ts` を作成し、Base Sepoliaネットワークと各種ウォレット（MetaMask, etc.）を設定したWagmiプロバイダーを構成。
   - `App.tsx` をWagmiプロバイダーでラップする。
