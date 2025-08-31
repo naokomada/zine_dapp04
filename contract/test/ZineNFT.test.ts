@@ -5,15 +5,13 @@ import { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers";
 
 describe("ZineNFT", function () {
   let zineNFT: ZineNFT;
-  let owner: HardhatEthersSigner;
-  let user: HardhatEthersSigner;
-  const tokenURI = "ipfs://some-hash";
+  let user1: HardhatEthersSigner;
+  let user2: HardhatEthersSigner;
 
   beforeEach(async function () {
-    [owner, user] = await ethers.getSigners();
+    [user1, user2] = await ethers.getSigners();
     const ZineNFTFactory = await ethers.getContractFactory("ZineNFT");
-    // Deploy with the 'owner' as the initial owner
-    zineNFT = await ZineNFTFactory.deploy(owner.address);
+    zineNFT = await ZineNFTFactory.deploy();
     await zineNFT.waitForDeployment();
   });
 
@@ -22,39 +20,47 @@ describe("ZineNFT", function () {
     expect(await zineNFT.symbol()).to.equal("ZINE");
   });
 
-  it("Should set the deployer as the owner", async function () {
-    expect(await zineNFT.owner()).to.equal(owner.address);
-  });
-
   describe("Minting", function () {
-    it("Should allow the owner to mint a new NFT", async function () {
-      await expect(zineNFT.connect(owner).safeMint(user.address, tokenURI))
+    const bookTitle1 = "My First Zine";
+    const bookTitle2 = "Another Awesome Zine";
+
+    it("Should allow any user to mint an NFT", async function () {
+      // User1 mints an NFT
+      await expect(zineNFT.connect(user1).mint(bookTitle1))
         .to.emit(zineNFT, "Transfer")
-        .withArgs(ethers.ZeroAddress, user.address, 0);
-      
-      expect(await zineNFT.ownerOf(0)).to.equal(user.address);
-      expect(await zineNFT.balanceOf(user.address)).to.equal(1);
-      expect(await zineNFT.tokenURI(0)).to.equal(tokenURI);
+        .withArgs(ethers.ZeroAddress, user1.address, 0);
+
+      expect(await zineNFT.ownerOf(0)).to.equal(user1.address);
+      expect(await zineNFT.balanceOf(user1.address)).to.equal(1);
     });
 
-    it("Should prevent non-owners from minting", async function () {
-      await expect(
-        zineNFT.connect(user).safeMint(user.address, tokenURI)
-      ).to.be.revertedWithCustomError(zineNFT, "OwnableUnauthorizedAccount").withArgs(user.address);
+    it("Should correctly store the book title", async function () {
+      await zineNFT.connect(user1).mint(bookTitle1);
+      expect(await zineNFT.getBookTitle(0)).to.equal(bookTitle1);
     });
 
-    it("Should increment token IDs", async function () {
-      const anotherUser = (await ethers.getSigners())[2];
-      const anotherURI = "ipfs://another-hash";
+    it("Should return the fixed tokenURI", async function () {
+      await zineNFT.connect(user1).mint(bookTitle1);
+      expect(await zineNFT.tokenURI(0)).to.equal("https://example.com/zine_dapp_metadata.json");
+    });
 
-      await zineNFT.connect(owner).safeMint(user.address, tokenURI);
-      await zineNFT.connect(owner).safeMint(anotherUser.address, anotherURI);
+    it("Should increment token IDs correctly", async function () {
+      // User1 mints
+      await zineNFT.connect(user1).mint(bookTitle1);
+      // User2 mints
+      await zineNFT.connect(user2).mint(bookTitle2);
 
-      expect(await zineNFT.ownerOf(0)).to.equal(user.address);
-      expect(await zineNFT.tokenURI(0)).to.equal(tokenURI);
+      // Check NFT 0
+      expect(await zineNFT.ownerOf(0)).to.equal(user1.address);
+      expect(await zineNFT.getBookTitle(0)).to.equal(bookTitle1);
 
-      expect(await zineNFT.ownerOf(1)).to.equal(anotherUser.address);
-      expect(await zineNFT.tokenURI(1)).to.equal(anotherURI);
+      // Check NFT 1
+      expect(await zineNFT.ownerOf(1)).to.equal(user2.address);
+      expect(await zineNFT.getBookTitle(1)).to.equal(bookTitle2);
+    });
+
+    it("Should revert when querying book title for a nonexistent token", async function () {
+        await expect(zineNFT.getBookTitle(0)).to.be.revertedWith("ZineNFT: query for nonexistent token");
     });
   });
 });

@@ -29,12 +29,11 @@ export interface ZineNFTInterface extends Interface {
       | "approve"
       | "balanceOf"
       | "getApproved"
+      | "getBookTitle"
       | "isApprovedForAll"
+      | "mint"
       | "name"
-      | "owner"
       | "ownerOf"
-      | "renounceOwnership"
-      | "safeMint"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
@@ -42,17 +41,10 @@ export interface ZineNFTInterface extends Interface {
       | "symbol"
       | "tokenURI"
       | "transferFrom"
-      | "transferOwnership"
   ): FunctionFragment;
 
   getEvent(
-    nameOrSignatureOrTopic:
-      | "Approval"
-      | "ApprovalForAll"
-      | "BatchMetadataUpdate"
-      | "MetadataUpdate"
-      | "OwnershipTransferred"
-      | "Transfer"
+    nameOrSignatureOrTopic: "Approval" | "ApprovalForAll" | "Transfer"
   ): EventFragment;
 
   encodeFunctionData(
@@ -68,22 +60,18 @@ export interface ZineNFTInterface extends Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "isApprovedForAll",
-    values: [AddressLike, AddressLike]
-  ): string;
-  encodeFunctionData(functionFragment: "name", values?: undefined): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "ownerOf",
+    functionFragment: "getBookTitle",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "renounceOwnership",
-    values?: undefined
+    functionFragment: "isApprovedForAll",
+    values: [AddressLike, AddressLike]
   ): string;
+  encodeFunctionData(functionFragment: "mint", values: [string]): string;
+  encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "safeMint",
-    values: [AddressLike, string]
+    functionFragment: "ownerOf",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "safeTransferFrom(address,address,uint256)",
@@ -110,10 +98,6 @@ export interface ZineNFTInterface extends Interface {
     functionFragment: "transferFrom",
     values: [AddressLike, AddressLike, BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "transferOwnership",
-    values: [AddressLike]
-  ): string;
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
@@ -122,17 +106,16 @@ export interface ZineNFTInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getBookTitle",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "renounceOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "safeMint", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "safeTransferFrom(address,address,uint256)",
     data: BytesLike
@@ -153,10 +136,6 @@ export interface ZineNFTInterface extends Interface {
   decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferFrom",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
 }
@@ -194,47 +173,6 @@ export namespace ApprovalForAllEvent {
     owner: string;
     operator: string;
     approved: boolean;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace BatchMetadataUpdateEvent {
-  export type InputTuple = [
-    _fromTokenId: BigNumberish,
-    _toTokenId: BigNumberish
-  ];
-  export type OutputTuple = [_fromTokenId: bigint, _toTokenId: bigint];
-  export interface OutputObject {
-    _fromTokenId: bigint;
-    _toTokenId: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace MetadataUpdateEvent {
-  export type InputTuple = [_tokenId: BigNumberish];
-  export type OutputTuple = [_tokenId: bigint];
-  export interface OutputObject {
-    _tokenId: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace OwnershipTransferredEvent {
-  export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
-  export type OutputTuple = [previousOwner: string, newOwner: string];
-  export interface OutputObject {
-    previousOwner: string;
-    newOwner: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -313,25 +251,19 @@ export interface ZineNFT extends BaseContract {
 
   getApproved: TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
 
+  getBookTitle: TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
+
   isApprovedForAll: TypedContractMethod<
     [owner: AddressLike, operator: AddressLike],
     [boolean],
     "view"
   >;
 
+  mint: TypedContractMethod<[bookTitle: string], [void], "nonpayable">;
+
   name: TypedContractMethod<[], [string], "view">;
 
-  owner: TypedContractMethod<[], [string], "view">;
-
   ownerOf: TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
-
-  renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
-
-  safeMint: TypedContractMethod<
-    [to: AddressLike, uri: string],
-    [void],
-    "nonpayable"
-  >;
 
   "safeTransferFrom(address,address,uint256)": TypedContractMethod<
     [from: AddressLike, to: AddressLike, tokenId: BigNumberish],
@@ -372,12 +304,6 @@ export interface ZineNFT extends BaseContract {
     "nonpayable"
   >;
 
-  transferOwnership: TypedContractMethod<
-    [newOwner: AddressLike],
-    [void],
-    "nonpayable"
-  >;
-
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
   ): T;
@@ -396,6 +322,9 @@ export interface ZineNFT extends BaseContract {
     nameOrSignature: "getApproved"
   ): TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
   getFunction(
+    nameOrSignature: "getBookTitle"
+  ): TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
+  getFunction(
     nameOrSignature: "isApprovedForAll"
   ): TypedContractMethod<
     [owner: AddressLike, operator: AddressLike],
@@ -403,20 +332,14 @@ export interface ZineNFT extends BaseContract {
     "view"
   >;
   getFunction(
-    nameOrSignature: "name"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: "mint"
+  ): TypedContractMethod<[bookTitle: string], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "owner"
+    nameOrSignature: "name"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "ownerOf"
   ): TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
-  getFunction(
-    nameOrSignature: "renounceOwnership"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "safeMint"
-  ): TypedContractMethod<[to: AddressLike, uri: string], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "safeTransferFrom(address,address,uint256)"
   ): TypedContractMethod<
@@ -459,9 +382,6 @@ export interface ZineNFT extends BaseContract {
     [void],
     "nonpayable"
   >;
-  getFunction(
-    nameOrSignature: "transferOwnership"
-  ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
 
   getEvent(
     key: "Approval"
@@ -476,27 +396,6 @@ export interface ZineNFT extends BaseContract {
     ApprovalForAllEvent.InputTuple,
     ApprovalForAllEvent.OutputTuple,
     ApprovalForAllEvent.OutputObject
-  >;
-  getEvent(
-    key: "BatchMetadataUpdate"
-  ): TypedContractEvent<
-    BatchMetadataUpdateEvent.InputTuple,
-    BatchMetadataUpdateEvent.OutputTuple,
-    BatchMetadataUpdateEvent.OutputObject
-  >;
-  getEvent(
-    key: "MetadataUpdate"
-  ): TypedContractEvent<
-    MetadataUpdateEvent.InputTuple,
-    MetadataUpdateEvent.OutputTuple,
-    MetadataUpdateEvent.OutputObject
-  >;
-  getEvent(
-    key: "OwnershipTransferred"
-  ): TypedContractEvent<
-    OwnershipTransferredEvent.InputTuple,
-    OwnershipTransferredEvent.OutputTuple,
-    OwnershipTransferredEvent.OutputObject
   >;
   getEvent(
     key: "Transfer"
@@ -527,39 +426,6 @@ export interface ZineNFT extends BaseContract {
       ApprovalForAllEvent.InputTuple,
       ApprovalForAllEvent.OutputTuple,
       ApprovalForAllEvent.OutputObject
-    >;
-
-    "BatchMetadataUpdate(uint256,uint256)": TypedContractEvent<
-      BatchMetadataUpdateEvent.InputTuple,
-      BatchMetadataUpdateEvent.OutputTuple,
-      BatchMetadataUpdateEvent.OutputObject
-    >;
-    BatchMetadataUpdate: TypedContractEvent<
-      BatchMetadataUpdateEvent.InputTuple,
-      BatchMetadataUpdateEvent.OutputTuple,
-      BatchMetadataUpdateEvent.OutputObject
-    >;
-
-    "MetadataUpdate(uint256)": TypedContractEvent<
-      MetadataUpdateEvent.InputTuple,
-      MetadataUpdateEvent.OutputTuple,
-      MetadataUpdateEvent.OutputObject
-    >;
-    MetadataUpdate: TypedContractEvent<
-      MetadataUpdateEvent.InputTuple,
-      MetadataUpdateEvent.OutputTuple,
-      MetadataUpdateEvent.OutputObject
-    >;
-
-    "OwnershipTransferred(address,address)": TypedContractEvent<
-      OwnershipTransferredEvent.InputTuple,
-      OwnershipTransferredEvent.OutputTuple,
-      OwnershipTransferredEvent.OutputObject
-    >;
-    OwnershipTransferred: TypedContractEvent<
-      OwnershipTransferredEvent.InputTuple,
-      OwnershipTransferredEvent.OutputTuple,
-      OwnershipTransferredEvent.OutputObject
     >;
 
     "Transfer(address,address,uint256)": TypedContractEvent<
