@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "hardhat": "^3.0.3"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.1"
+  }
+}
