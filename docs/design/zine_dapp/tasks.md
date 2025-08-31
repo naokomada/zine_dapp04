@@ -8,13 +8,13 @@
 
 ### フェーズ1: プロジェクト基盤とスマートコントラクト
 
-- [ ] 1. **プロジェクト基盤セットアップ**
+- [x] 1. **プロジェクト基盤セットアップ**
   - `pnpm` を使ったモノレポ（ワークスペース）環境の確認。
-  - `pkgs/contract` に Hardhat プロジェクトがセットアップされていることを確認。
-  - `pkgs/frontend` に Vite + React + TypeScript プロジェクトをセットアップ。
+  - `contract` に Hardhat プロジェクトがセットアップされていることを確認。
+  - `frontend` に Vite + React + TypeScript プロジェクトをセットアップ。
 
 - [ ] 2. **スマートコントラクト開発 (ZineNFT)**
-  - `pkgs/contract/contracts/ZineNFT.sol` を実装。
+  - `contract/contracts/ZineNFT.sol` を実装。
     - ERC-721を継承。
     - `tokenId`と書名をマッピングする変数 `mapping(uint256 => string) private _bookTitles;` を定義。
     - `mint(string memory bookTitle)` 関数を実装（`to` は `msg.sender` を内部で指定）。
@@ -23,14 +23,14 @@
     - `tokenURI` 関数をオーバーライドし、`getBookTitle` を利用して書名を含むBase64エンコードされたJSONをオンチェーンで生成して返すように実装。
 
 - [ ] 3. **スマートコントラクトのテストとデプロイ**
-  - `pkgs/contract/test/ZineNFT.test.ts` で `mint` 関数のユニットテストを作成。
+  - `contract/test/ZineNFT.test.ts` で `mint` 関数のユニットテストを作成。
   - Hardhatスクリプトを作成し、`ZineNFT.sol` を Base Sepolia にデプロイ。
   - デプロイしたコントラクトアドレスを控えておく。
 
 ### フェーズ2: フロントエンド開発
 
 - [ ] 4. **Web3設定とプロバイダー実装**
-  - `pkgs/frontend` で `wagmi`, `viem` をインストール。
+  - `frontend` で `wagmi`, `viem` をインストール。
   - `src/lib/wagmi.ts` を作成し、Base Sepoliaネットワークと各種ウォレット（MetaMask, etc.）を設定したWagmiプロバイダーを構成。
   - `App.tsx` をWagmiプロバイダーでラップする。
 
@@ -45,8 +45,8 @@
     - 「所有権を登録する」ボタンを設置。ウォレットが未接続の場合は非活性化する。
 
 - [ ] 7. **コントラクトインタラクション実装 (カスタムフック)**
-  - `pkgs/contract` から `ZineNFT.json` (ABI) を `pkgs/frontend/src/lib/abi/` にコピー。
-  - `pkgs/frontend/src/lib/constants.ts` にデプロイしたコントラクトアドレスを定義。
+  - `contract` から `ZineNFT.json` (ABI) を `frontend/src/lib/abi/` にコピー。
+  - `frontend/src/lib/constants.ts` にデプロイしたコントラクトアドレスを定義。
   - `src/hooks/useZineNFT.ts` を作成。
     - `useWriteContract` を使って `mint` 関数を呼び出す `mintNFT(bookTitle: string)` 関数を実装。
     - ミント処理中のローディング状態 (`isPending`) やエラー (`error`) を返すようにする。
