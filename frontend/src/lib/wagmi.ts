@@ -1,14 +1,9 @@
-import { createConfig, http } from 'wagmi'
-import { baseSepolia } from 'wagmi/chains'
-import { injected, metaMask } from 'wagmi/connectors'
+import { getDefaultConfig } from '@rainbow-me/rainbowkit';
+import { baseSepolia } from 'wagmi/chains';
 
-export const config = createConfig({
+export const config = getDefaultConfig({
+  appName: 'Zine DApp',
+  projectId: 'c1b6f2d75232e6534f623a9913535911', // TODO: WalletConnect Cloud から取得した Project ID に置き換えてください
   chains: [baseSepolia],
-  connectors: [
-    injected(),
-    metaMask(),
-  ],
-  transports: {
-    [baseSepolia.id]: http(),
-  },
-})
+  ssr: false, // Next.js を使わない場合は false
+});
