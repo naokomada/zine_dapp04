@@ -1,4 +1,5 @@
 import { Header } from '../components/layout/Header';
+import { ZineMinter } from '../components/ZineMinter';
 
 const HomePage = () => {
   return (
@@ -6,7 +7,7 @@ const HomePage = () => {
       <Header />
       <main style={{ padding: '1rem' }}>
         <h2>Register Your Book</h2>
-        {/* ZineMinter component will go here */}
+        <ZineMinter />
       </main>
     </div>
   );

@@ -34,7 +34,7 @@
   - `src/lib/wagmi.ts` を作成し、Base Sepoliaネットワークと各種ウォレット（MetaMask, etc.）を設定したWagmiプロバイダーを構成。
   - `App.tsx` をWagmiプロバイダーでラップする。
 
-- [ ] 5. **基本UIコンポーネント実装**
+- [x] 5. **基本UIコンポーネント実装**
   - `src/components/layout/Header.tsx` を作成。
     - ウォレット接続・切断・アドレス表示機能を持つボタンを実装する。（RainbowKitやConnectKitの利用も検討）
   - `src/pages/HomePage.tsx` を作成し、`Header`コンポーネントを配置。
