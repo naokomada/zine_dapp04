@@ -22,7 +22,7 @@
     - `tokenId`を引数に取り、書名を返す `getBookTitle(uint256 tokenId) external view returns (string memory)` 関数を実装。
     - `tokenURI` 関数をオーバーライドし、**固定のメタデータURLを返すように実装。
 
-- [ ] 3. **スマートコントラクトのテストとデプロイ**
+- [x] 3. **スマートコントラクトのテストとデプロイ**
   - `contract/test/ZineNFT.test.ts` で `mint` 関数のユニットテストを作成。
   - Hardhatスクリプトを作成し、`ZineNFT.sol` を Base Sepolia にデプロイ。
   - デプロイしたコントラクトアドレスを控えておく。
