@@ -13,14 +13,14 @@
   - `contract` に Hardhat プロジェクトがセットアップされていることを確認。
   - `frontend` に Vite + React + TypeScript プロジェクトをセットアップ。
 
-- [ ] 2. **スマートコントラクト開発 (ZineNFT)**
+- [x] 2. **スマートコントラクト開発 (ZineNFT)**
   - `contract/contracts/ZineNFT.sol` を実装。
     - ERC-721を継承。
     - `tokenId`と書名をマッピングする変数 `mapping(uint256 => string) private _bookTitles;` を定義。
     - `mint(string memory bookTitle)` 関数を実装（`to` は `msg.sender` を内部で指定）。
       - ミント後、引数の `bookTitle` を `_bookTitles` マッピングに保存する。
     - `tokenId`を引数に取り、書名を返す `getBookTitle(uint256 tokenId) external view returns (string memory)` 関数を実装。
-    - `tokenURI` 関数をオーバーライドし、`getBookTitle` を利用して書名を含むBase64エンコードされたJSONをオンチェーンで生成して返すように実装。
+    - `tokenURI` 関数をオーバーライドし、**固定のメタデータURLを返すように実装。
 
 - [ ] 3. **スマートコントラクトのテストとデプロイ**
   - `contract/test/ZineNFT.test.ts` で `mint` 関数のユニットテストを作成。

@@ -2,38 +2,26 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract ZineNFT is ERC721, ERC721URIStorage, Ownable {
+contract ZineNFT is ERC721 {
     uint256 private _nextTokenId;
+    mapping(uint256 => string) private _bookTitles;
 
-    constructor(address initialOwner)
-        ERC721("Zine NFT", "ZINE")
-        Ownable(initialOwner)
-    {}
+    constructor() ERC721("Zine NFT", "ZINE") {}
 
-    function safeMint(address to, string memory uri) public onlyOwner {
+    function mint(string memory bookTitle) public {
         uint256 tokenId = _nextTokenId++;
-        _safeMint(to, tokenId);
-        _setTokenURI(tokenId, uri);
+        _safeMint(msg.sender, tokenId);
+        _bookTitles[tokenId] = bookTitle;
     }
 
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (string memory)
-    {
-        return super.tokenURI(tokenId);
+    function getBookTitle(uint256 tokenId) external view returns (string memory) {
+        require(_exists(tokenId), "ZineNFT: query for nonexistent token");
+        return _bookTitles[tokenId];
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        require(_exists(tokenId), "ZineNFT: URI query for nonexistent token");
+        return "https://example.com/zine_dapp_metadata.json"; // 固定値を返す
     }
 }
