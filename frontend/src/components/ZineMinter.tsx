@@ -45,7 +45,7 @@ export const ZineMinter = () => {
       
       {error && (
         <div>
-          <p style={{ color: 'red' }}>Error: {error.shortMessage || error.message}</p>
+          <p style={{ color: 'red' }}>Error: {error.message}</p>
         </div>
       )}
     </div>
