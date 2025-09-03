@@ -4,6 +4,20 @@
 
 zine dapp04は、書籍やメディアコンテンツの所有権をブロックチェーン上で管理するためのWebアプリケーションです。このアプリケーションは、コンテンツ所有者が本の書名を記録したNFT（本の所有票）を発行し、ブロックチェーン上で所有権を証明できるようにします。
 
+### 使い方
+
+1. サンプルサイトにアクセスする
+sample site: https://zine-dapp04-frontend.vercel.app
+2. ウォレットを接続する。
+3. 本のタイトルを入力してRegister Ownershipボタンを押すと、トランザクションが発行され、本の所有票トークンが発行されます。
+4. 以下のスクリプトで実際に登録したトークンの書名を確認できます。
+
+```bash
+cd contract
+npx hardhat run scripts/getState-viem.ts --network base_sepolia
+```
+
+
 ## 目的
 
 書籍を愛好するユーザーが、書店やECサイトで流通されなくなったコンテンツを中古で探す際に、現在のコンテンツ所有者が所有状態をブロックチェーンに記録しておくことで、コンテンツの発見を容易にすることを目的としています。
@@ -86,6 +100,7 @@ npx hardhat ignition deploy ignition/modules/ZineNFT.ts --network base_sepolia
 
 ### 状態確認スクリプト
 ```bash
+cd contract
 npx hardhat run scripts/getState-viem.ts --network base_sepolia
 ```
 
