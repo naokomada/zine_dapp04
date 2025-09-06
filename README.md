@@ -10,11 +10,11 @@ zine dapp04は、書籍やメディアコンテンツの所有権をブロック
 sample site: https://zine-dapp04-frontend.vercel.app
 2. ウォレットを接続する。
 3. 本のタイトルを入力してRegister Ownershipボタンを押すと、トランザクションが発行され、本の所有票トークンが発行されます。
-4. 以下のスクリプトで実際に登録したトークンの書名を確認できます。
+4. 以下のスクリプトで実際に登録したトークンの書名を確認できます。(デプロイ済みのtokenIdを指定します)
 
 ```bash
 cd contract
-npx hardhat run scripts/getState-viem.ts --network base_sepolia
+npx hardhat getState --network base_sepolia --tokenid 1
 ```
 
 
@@ -103,12 +103,13 @@ cd contract
 npx hardhat ignition deploy ignition/modules/ZineNFT.ts --network base_sepolia
 ```
 
-
-
 ### 状態確認スクリプト
 ```bash
 cd contract
-npx hardhat run scripts/getState-viem.ts --network base_sepolia
+npx hardhat getState --network base_sepolia --tokenid <状態を取得したいNFTのtokenId>
+
+# <tokenId> の部分を、状態を取得したいNFTのIDに置き換えてください。例:
+  npx hardhat getState --network base_sepolia --tokenid 1
 ```
 
 ## アーキテクチャ
