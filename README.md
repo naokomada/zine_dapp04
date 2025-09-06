@@ -63,23 +63,27 @@ AIが社会に広く普及する未来においても、コンテンツの長期
 ### 1. スマートコントラクトのデプロイ
 ```bash
 # コントラクトディレクトリで.envファイルを設定
+cd contract/
+cp .env.example .env
+
 # 秘密鍵などの必要な環境変数を設定
 
 # Base Sepoliaにデプロイ
-cd contract/
 npx hardhat ignition deploy ignition/modules/ZineNFT.ts --network base_sepolia
 ```
 
 ### 2. フロントエンドの設定
 ```bash
+cd frontend/
+
+# 設定ファイル(reownのprojectid)
+cp .env.example .env
+
 # 依存関係のインストール
 pnpm install
 
 # デプロイしたコントラクトアドレスを設定
 # frontend/src/lib/constants.ts を編集
-
-# WalletConnectを使用する場合
-# frontend/src/lib/wagmi.ts のprojectIdを設定
 ```
 
 ### 3. 開発サーバーの起動
