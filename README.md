@@ -4,6 +4,20 @@
 
 zine dapp04は、書籍やメディアコンテンツの所有権をブロックチェーン上で管理するためのWebアプリケーションです。このアプリケーションは、コンテンツ所有者が本の書名を記録したNFT（本の所有票）を発行し、ブロックチェーン上で所有権を証明できるようにします。
 
+### 使い方
+
+1. サンプルサイトにアクセスする
+sample site: https://zine-dapp04-frontend.vercel.app
+2. ウォレットを接続する。
+3. 本のタイトルを入力してRegister Ownershipボタンを押すと、トランザクションが発行され、本の所有票トークンが発行されます。
+4. 以下のスクリプトで実際に登録したトークンの書名を確認できます。(デプロイ済みのtokenIdを指定します)
+
+```bash
+cd contract
+npx hardhat getState --network base_sepolia --tokenid 1
+```
+
+
 ## 目的
 
 書籍を愛好するユーザーが、書店やECサイトで流通されなくなったコンテンツを中古で探す際に、現在のコンテンツ所有者が所有状態をブロックチェーンに記録しておくことで、コンテンツの発見を容易にすることを目的としています。
@@ -11,6 +25,11 @@ zine dapp04は、書籍やメディアコンテンツの所有権をブロック
 NFTがコンテンツの所有権を有していることの証明に利用できることは、従来から知られていました。
 しかし、その所有情報は、所有者自体のため（転売や特典の入手に使う）のものとして活用方法が考えられてきています。これに対して、このプロダクトは、ある人がコンテンツを所有していることを、他の人が知ることで、社会全体に利益が持たされることを目指しています。
 個々の人々は、自身の所有するコンテンツの情報を公開しあうことで、社会全体が有益なコンテンツを長く流通させることを目指します。
+
+### 将来的な発展
+
+AIが社会に広く普及する未来においても、コンテンツの長期的な保存と流通は重要です。AIの学習やRAG（検索拡張生成）システムは、常に信頼できる情報源を必要とするためです。
+ブロックチェーン上でコンテンツの参照情報を永続的に保存することで、AIが自動的にコンテンツを発見・活用できるようになります。これにより、人間だけでなく機械にとっても価値のある情報インフラを構築できます。
 
 ## 主な機能
 
@@ -44,6 +63,9 @@ NFTがコンテンツの所有権を有していることの証明に利用で�
 ### 1. スマートコントラクトのデプロイ
 ```bash
 # コントラクトディレクトリで.envファイルを設定
+cd contract/
+cp .env.example .env
+
 # 秘密鍵などの必要な環境変数を設定
 
 # Base Sepoliaにデプロイ
@@ -52,14 +74,16 @@ npx hardhat ignition deploy ignition/modules/ZineNFT.ts --network base_sepolia
 
 ### 2. フロントエンドの設定
 ```bash
+cd frontend/
+
+# 設定ファイル(reownのprojectid)
+cp .env.example .env
+
 # 依存関係のインストール
 pnpm install
 
 # デプロイしたコントラクトアドレスを設定
 # frontend/src/lib/constants.ts を編集
-
-# WalletConnectを使用する場合
-# frontend/src/lib/wagmi.ts のprojectIdを設定
 ```
 
 ### 3. 開発サーバーの起動
@@ -79,14 +103,17 @@ pnpm run dev
 
 ### コントラクトデプロイ
 ```bash
+cd contract
 npx hardhat ignition deploy ignition/modules/ZineNFT.ts --network base_sepolia
 ```
 
-
-
 ### 状態確認スクリプト
 ```bash
-npx hardhat run scripts/getState-viem.ts --network base_sepolia
+cd contract
+npx hardhat getState --network base_sepolia --tokenid <状態を取得したいNFTのtokenId>
+
+# <tokenId> の部分を、状態を取得したいNFTのIDに置き換えてください。例:
+  npx hardhat getState --network base_sepolia --tokenid 1
 ```
 
 ## アーキテクチャ
