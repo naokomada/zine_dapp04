@@ -4,7 +4,7 @@ import { viem } from "hardhat";
 async function main(): Promise<void> {
   // 1. デプロイ済みコントラクトのアドレスとtokenId
   const contractAddress: `0x${string}` = "0x573e526c0Ce89c1361b81020F1aE916aCfa4f2Ae"; // <-- 取得したいコントラクトのアドレス
-  const tokenId = 0;
+  const tokenId = 2;
 
   // 2. コントラクト名 (型: string)
   const contractName: string = "ZineNFT";
