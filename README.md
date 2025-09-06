@@ -14,6 +14,7 @@ sample site: https://zine-dapp04-frontend.vercel.app
 
 ```bash
 cd contract
+npx hardhat compile
 npx hardhat getState --network base_sepolia --tokenid 1
 ```
 
